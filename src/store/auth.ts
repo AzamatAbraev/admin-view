@@ -1,29 +1,32 @@
-import { FormInstance, message } from "antd";
-import { NavigateFunction } from "react-router-dom";
+import { message } from "antd";
 import { create } from "zustand";
 import request from "../server";
 import Cookies from "js-cookie";
+import { NavigateFunction } from "react-router-dom";
+import LoginType from "../types/login";
+import { USER_DATA } from "../constants";
+import RegisterType from "../types/register";
 
 interface AuthType {
   isAuthenticated: boolean;
   loading: boolean;
-  login: (form: FormInstance, navigate: NavigateFunction) => void;
+  login: (values: LoginType, navigate: NavigateFunction) => void;
+  register: (values: RegisterType, navigate: NavigateFunction) => void;
+  logout: (navigate: NavigateFunction) => void;
 }
 
 const useAuth = create<AuthType>()((set) => ({
   isAuthenticated: Boolean(Cookies.get("TOKEN")),
   loading: false,
-  login: async (form, navigate) => {
+
+  login: async (values, navigate) => {
     try {
-      const values = await form.validateFields();
       const {
         data: { token, user },
       } = await request.post("auth/login", values);
       set({ loading: true, isAuthenticated: true });
       Cookies.set("TOKEN", token);
-      Cookies.set("USER_NAME", user?.name);
-      Cookies.set("USER_ID", user?.userId);
-
+      localStorage.setItem(USER_DATA, JSON.stringify(user));
       request.defaults.headers.Authorization = `Bearer ${token}`;
 
       message.success("You are logged in");
@@ -31,6 +34,32 @@ const useAuth = create<AuthType>()((set) => ({
     } finally {
       set({ loading: false });
     }
+  },
+
+  register: async (values, navigate) => {
+    try {
+      const {
+        data: { token, user },
+      } = await request.post("auth/register", values);
+      set({ loading: true });
+      Cookies.set("TOKEN", token);
+      localStorage.setItem(USER_DATA, JSON.stringify(user));
+      request.defaults.headers.Authorization = `Bearer ${token}`;
+      request.defaults.headers.Authorization = `Bearer ${token}`;
+      message.success("You are registred!");
+      navigate("/dashboard");
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  logout: (navigate) => {
+    Cookies.remove("TOKEN");
+    localStorage.removeItem(USER_DATA);
+    delete request.defaults.headers.Authorization;
+    set({ isAuthenticated: false });
+    message.info("You are logged out");
+    navigate("/login");
   },
 }));
 

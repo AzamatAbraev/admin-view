@@ -1,51 +1,74 @@
-import { useNavigate } from 'react-router-dom';
-import { Button, Form, Input } from 'antd';
+import { Link, useNavigate } from "react-router-dom";
+import { useFormik } from 'formik';
+import loginBackground from "../../assets/login.png"
+import useAuth from "../../store/auth";
 
-import LoginType from '../../types/login';
-import useAuth from '../../store/auth';
+import LoginSchema from "../../schemas/login";
+
+import "./style.scss"
 
 const LoginPage = () => {
-  const [form] = Form.useForm();
+  const { login } = useAuth()
   const navigate = useNavigate();
 
-  const { login } = useAuth();
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: LoginSchema,
+    onSubmit: async (values) => {
+      await login(values, navigate);
+    },
+  });
 
   return (
-    <Form
-      form={form}
-      name="login"
-      labelCol={{
-        span: 24,
-      }}
-      wrapperCol={{
-        span: 24,
-      }}
-      style={{ maxWidth: 600 }}
-      onFinish={() => login(form, navigate)}
-      autoComplete="off"
-    >
-      <Form.Item<LoginType>
-        label="Email"
-        name="email"
-        rules={[{ required: true, message: 'Please input your username!' }]}
-      >
-        <Input />
-      </Form.Item>
+    <section className="login-page">
+      <div className="login__main">
+        <div className="login__header">
+          <h2>Sign In</h2>
+          <p>Do not have an account? <Link to="/register">Register</Link></p>
+        </div>
+        <form onSubmit={formik.handleSubmit} className="login__form">
+          <div className="input__field">
+            <input
+              type="text"
+              id="email"
+              name="email"
+              placeholder="Email"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
+            />
+            <p className={`error-message ${formik.touched.email && formik.errors.email ? 'active' : ''}`}>
+              {formik.touched.email && formik.errors.email ? formik.errors.email : null}
+            </p>
+          </div>
 
-      <Form.Item<LoginType>
-        label="Password"
-        name="password"
-        rules={[{ required: true, message: 'Please input your password!' }]}
-      >
-        <Input.Password />
-      </Form.Item>
+          <div className="input__field">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.password}
+            />
+            <p className={`error-message ${formik.touched.password && formik.errors.password ? 'active' : ''}`}>
+              {formik.touched.password && formik.errors.password ? formik.errors.password : null}
+            </p>
+          </div>
 
-      <Form.Item wrapperCol={{ offset: 0, span: 24 }}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>)
+
+          <button type="submit" className="login__btn">Login</button>
+        </form>
+      </div>
+      <div className="background-image">
+        <img alt="Login background" src={loginBackground} />
+      </div>
+    </section>
+  );
 };
 
 export default LoginPage;

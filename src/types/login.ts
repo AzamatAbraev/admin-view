@@ -1,6 +1,6 @@
 interface LoginType {
-  email: string;
-  password: string;
+  email: FormDataEntryValue | string | null;
+  password: FormDataEntryValue | string | null;
 }
 
 export default LoginType;
