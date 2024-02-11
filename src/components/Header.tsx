@@ -37,7 +37,7 @@ const DashboardHeader = () => {
             Hello, {name}
           </p>
           <div className="nav__controls">
-            <button className="nav__btn">Account</button>
+            <button className="nav__btn" onClick={() => navigate("/account")}>Account</button>
             <button className="nav__btn" onClick={showModal}>Logout</button>
           </div>
         </div>

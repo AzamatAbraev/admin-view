@@ -36,7 +36,7 @@ const RegisterPage = () => {
               type="text"
               id="name"
               name="name"
-              placeholder="name"
+              placeholder="Name"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.name}

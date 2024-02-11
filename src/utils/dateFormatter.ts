@@ -1,4 +1,4 @@
-function dateTimeFormatter(timestamp: string): string {
+function dateTimeFormatter(timestamp: Date): string {
   const date = new Date(timestamp);
 
   const options: Intl.DateTimeFormatOptions = {
