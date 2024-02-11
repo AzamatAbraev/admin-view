@@ -20,11 +20,12 @@ const useAuth = create<AuthType>()((set) => ({
   loading: false,
 
   login: async (values, navigate) => {
+    set({ loading: true });
     try {
       const {
         data: { token, user },
       } = await request.post("auth/login", values);
-      set({ loading: true, isAuthenticated: true });
+      set({ isAuthenticated: true });
       Cookies.set("TOKEN", token);
       localStorage.setItem(USER_DATA, JSON.stringify(user));
       request.defaults.headers.Authorization = `Bearer ${token}`;
@@ -37,14 +38,13 @@ const useAuth = create<AuthType>()((set) => ({
   },
 
   register: async (values, navigate) => {
+    set({ loading: true });
     try {
       const {
         data: { token, user },
       } = await request.post("auth/register", values);
-      set({ loading: true });
       Cookies.set("TOKEN", token);
       localStorage.setItem(USER_DATA, JSON.stringify(user));
-      request.defaults.headers.Authorization = `Bearer ${token}`;
       request.defaults.headers.Authorization = `Bearer ${token}`;
       message.success("You are registred!");
       navigate("/dashboard");
