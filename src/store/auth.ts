@@ -47,7 +47,7 @@ const useAuth = create<AuthType>()((set) => ({
       localStorage.setItem(USER_DATA, JSON.stringify(user));
       request.defaults.headers.Authorization = `Bearer ${token}`;
       message.success("You are registred!");
-      navigate("/dashboard");
+      navigate("/login");
     } finally {
       set({ loading: false });
     }
