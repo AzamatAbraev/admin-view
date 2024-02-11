@@ -24,19 +24,6 @@ const DashboardTable = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentUser, setCurrentUser] = useState<DataType | null>(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  // const [isLoading, setIsLoading] = useState(false)
-
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   const timerId = setTimeout(() => {
-  //     setIsLoading(false)
-  //   }, 500)
-
-  //   return () => {
-  //     clearTimeout(timerId)
-  //   }
-  // }, [])
-
 
   const [form] = Form.useForm();
   const { users, loading, getAllUsers, deleteUser, blockUser, unblockUser, updateUser } = useUsers();
@@ -172,7 +159,6 @@ const DashboardTable = () => {
     if (selectedRowKeys.length > 0) {
       await Promise.all(selectedRowKeys.map((userId) => blockUser(userId as string)))
       getAllUsers()
-      message.info("Selected users blocked")
       setSelectedRowKeys([])
       selectedRowKeys.length === 1 ? message.info("User blocked") : message.info("Selected users blocked")
 
