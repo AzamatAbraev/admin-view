@@ -16,11 +16,12 @@ const useUsers = create<UsersType>()((set, get) => ({
   loading: false,
   users: [],
   getAllUsers: async () => {
+    set({ loading: true });
     try {
       const {
         data: { users },
       } = await request.get("users");
-      set({ loading: true, users });
+      set({ users });
     } finally {
       set({ loading: false });
     }

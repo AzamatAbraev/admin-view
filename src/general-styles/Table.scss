@@ -10,3 +10,15 @@
     }
   }
 }
+
+.ant-pagination-item {
+  background-color: #fff !important;
+}
+
+.ant-pagination-item-active {
+  background-color: #65c918 !important;
+  border: solid #fff !important;
+  a {
+    color: #fff !important;
+  }
+}

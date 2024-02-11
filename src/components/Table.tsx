@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, Modal, Space, Spin, Table, Tag, message } from 'antd';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Button, Form, Input, Modal, Space, Table, Tag, message } from 'antd';
 import type { TableColumnsType } from 'antd';
 
 import "../general-styles/Table.scss"
@@ -8,6 +8,7 @@ import dateTimeFormatter from '../utils/dateFormatter';
 import { CheckCircleOutlined, CloseCircleOutlined, DeleteOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { USER_DATA } from '../constants';
+import LoadingPage from '../pages/loading';
 
 interface DataType {
   _id: string;
@@ -22,10 +23,22 @@ const DashboardTable = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentUser, setCurrentUser] = useState<DataType | null>(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  // const [isLoading, setIsLoading] = useState(false)
+
+  // useEffect(() => {
+  //   setIsLoading(true);
+  //   const timerId = setTimeout(() => {
+  //     setIsLoading(false)
+  //   }, 500)
+
+  //   return () => {
+  //     clearTimeout(timerId)
+  //   }
+  // }, [])
 
 
   const [form] = Form.useForm();
-  const { users, getAllUsers, deleteUser, blockUser, unblockUser, updateUser } = useUsers();
+  const { users, loading, getAllUsers, deleteUser, blockUser, unblockUser, updateUser } = useUsers();
   const navigate = useNavigate();
 
 
@@ -208,43 +221,44 @@ const DashboardTable = () => {
   }, [getAllUsers]);
 
   return (
-    <main className='table'>
-      <Space style={{ marginBottom: 16 }}>
-        <Button onClick={showBlockModal} className='table__block__btn' danger >Block <LockOutlined /></Button>
-        <Button onClick={showUnblockModal} className='table__unblock__btn'>Unblock <UnlockOutlined /></Button>
-        <Button onClick={showDeleteModal} type='primary' danger>Delete   <DeleteOutlined /></Button>
-      </Space>
-      <Table
-        rowSelection={{
-          ...rowSelection,
-        }}
-        columns={columns}
-        dataSource={users.map((user) => ({ ...user, key: user._id }))}
-        bordered
-        rowKey={(user) => user._id}
-        scroll={{ x: "700px" }}
-        pagination={{ defaultPageSize: 7 }}
-        loading={{ indicator: <div><Spin /></div>, spinning: !users }}
-      />
-      <Modal title="Edit User" open={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <Form form={form} layout="vertical" name="userForm">
-          <Form.Item
-            name="name"
-            label="Name"
-            rules={[{ required: true, message: 'Please input the user\'s name!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="email"
-            label="Email"
-            rules={[{ required: true, message: 'Please input the user\'s email!' }]}
-          >
-            <Input />
-          </Form.Item>
-        </Form>
-      </Modal>
-    </main>
+    <Fragment>
+      {loading ? <LoadingPage /> : <main className='table'>
+        <Space style={{ marginBottom: 16 }}>
+          <Button onClick={showBlockModal} className='table__block__btn' danger >Block <LockOutlined /></Button>
+          <Button onClick={showUnblockModal} className='table__unblock__btn'>Unblock <UnlockOutlined /></Button>
+          <Button onClick={showDeleteModal} type='primary' danger>Delete   <DeleteOutlined /></Button>
+        </Space>
+        <Table
+          rowSelection={{
+            ...rowSelection,
+          }}
+          columns={columns}
+          dataSource={users.map((user) => ({ ...user, key: user._id }))}
+          bordered
+          rowKey={(user) => user._id}
+          scroll={{ x: "700px" }}
+          pagination={{ defaultPageSize: 7 }}
+        />
+        <Modal title="Edit User" open={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          <Form form={form} layout="vertical" name="userForm">
+            <Form.Item
+              name="name"
+              label="Name"
+              rules={[{ required: true, message: 'Please input the user\'s name!' }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="email"
+              label="Email"
+              rules={[{ required: true, message: 'Please input the user\'s email!' }]}
+            >
+              <Input />
+            </Form.Item>
+          </Form>
+        </Modal>
+      </main>}
+    </Fragment>
   );
 };
 

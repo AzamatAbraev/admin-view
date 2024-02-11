@@ -1,0 +1,22 @@
+.table {
+  padding: 30px;
+}
+.table__unblock__btn {
+  color: #76dc28;
+}
+.table__unblock__btn:hover {
+  color: #76dc28 !important;
+  border: 1px solid #fff !important;
+}
+
+.ant-pagination-item {
+  background-color: #fff !important;
+}
+
+.ant-pagination-item-active {
+  background-color: #65c918 !important;
+  border: solid #fff !important;
+}
+.ant-pagination-item-active a {
+  color: #fff !important;
+}

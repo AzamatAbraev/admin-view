@@ -6,6 +6,11 @@
   box-sizing: border-box;
 }
 
+a,
+button {
+  cursor: pointer;
+}
+
 body {
   font-family: "Plus Jakarta Sans", sans-serif;
 }
