@@ -14,7 +14,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="*" element={<NotFoundPage />} />
-        <Route path="/dashboard" element={isAuthenticated ? <AdminPage /> : <Navigate to="/login" />} />
+        <Route path="/dashboard" element={isAuthenticated ? <AdminPage /> : <NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   )

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, Modal, Space, Table, Tag, message } from 'antd';
+import { Button, Form, Input, Modal, Space, Spin, Table, Tag, message } from 'antd';
 import type { TableColumnsType } from 'antd';
 
 import "../general-styles/Table.scss"
@@ -60,20 +60,74 @@ const DashboardTable = () => {
 
 
   const handleDelete = async () => {
-    if (selectedRowKeys.length > 0) {
-      await Promise.all(selectedRowKeys.map((userId) => deleteUser(userId as string)));
-      getAllUsers()
-      selectedRowKeys.length === 1 ? message.info("User deleted") : message.info("Selected users deleted")
+    await Promise.all(selectedRowKeys.map((userId) => deleteUser(userId as string)));
+    getAllUsers()
+    selectedRowKeys.length === 1 ? message.info("User deleted") : message.info("Selected users deleted")
 
-      setSelectedRowKeys([])
-      if (selectedRowKeys.includes(userId)) {
-        message.info("Your account has been deleted. Redirecting to register page...");
-        navigate('/register');
-      }
-    } else {
-      message.error("Please select user to perform this action")
+    setSelectedRowKeys([])
+    if (selectedRowKeys.includes(userId)) {
+      message.info("Your account has been deleted. Redirecting to register page...");
+      navigate('/register');
     }
   }
+
+  const showDeleteModal = () => {
+    if (selectedRowKeys.length > 0) {
+      Modal.confirm({
+        title: selectedRowKeys.length === 1 ? 'Are you sure delete this user?' : 'Are you sure delete these users?',
+        content: 'This action cannot be undone',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'Cancel',
+        onOk() {
+          handleDelete();
+        },
+        onCancel() {
+          setSelectedRowKeys([])
+        },
+      });
+    } else {
+      message.info("Please select user(s) to perform this action")
+    }
+  };
+
+  const showBlockModal = () => {
+    if (selectedRowKeys.length > 0) {
+      Modal.confirm({
+        title: selectedRowKeys.length === 1 ? 'Are you sure block this user?' : 'Are you sure block these users?',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'Cancel',
+        onOk() {
+          handleBlock();
+        },
+        onCancel() {
+          setSelectedRowKeys([])
+        },
+      });
+    } else {
+      message.info("Please select user(s) to perform this action")
+    }
+  };
+
+  const showUnblockModal = () => {
+    if (selectedRowKeys.length > 0) {
+      Modal.confirm({
+        title: selectedRowKeys.length === 1 ? 'Are you sure unblock this user?' : 'Are you sure unblock these users?',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'Cancel',
+        onOk() {
+          handleUnblock();
+        },
+        onCancel() {
+          setSelectedRowKeys([])
+        },
+      });
+    } else {
+      message.info("Please select user(s) to perform this action")
+    }
+  };
 
   const showEditModal = (user: DataType) => {
     setCurrentUser(user);
@@ -156,9 +210,9 @@ const DashboardTable = () => {
   return (
     <main className='table'>
       <Space style={{ marginBottom: 16 }}>
-        <Button onClick={handleBlock} className='table__block__btn' danger >Block <LockOutlined /></Button>
-        <Button onClick={handleUnblock} className='table__unblock__btn'>Unblock <UnlockOutlined /></Button>
-        <Button onClick={handleDelete} type='primary' danger>Delete   <DeleteOutlined /></Button>
+        <Button onClick={showBlockModal} className='table__block__btn' danger >Block <LockOutlined /></Button>
+        <Button onClick={showUnblockModal} className='table__unblock__btn'>Unblock <UnlockOutlined /></Button>
+        <Button onClick={showDeleteModal} type='primary' danger>Delete   <DeleteOutlined /></Button>
       </Space>
       <Table
         rowSelection={{
@@ -170,6 +224,7 @@ const DashboardTable = () => {
         rowKey={(user) => user._id}
         scroll={{ x: "700px" }}
         pagination={{ defaultPageSize: 7 }}
+        loading={{ indicator: <div><Spin /></div>, spinning: !users }}
       />
       <Modal title="Edit User" open={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <Form form={form} layout="vertical" name="userForm">
