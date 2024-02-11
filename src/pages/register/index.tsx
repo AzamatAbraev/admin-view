@@ -75,7 +75,7 @@ const RegisterPage = () => {
             </p>
           </div>
 
-          <button type="submit" className="login__btn">Login</button>
+          <button type="submit" className="login__btn">Register</button>
         </form>
       </div>
       <div className="background-image">
