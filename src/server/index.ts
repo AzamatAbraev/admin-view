@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const request = axios.create({
-  baseURL: "https://dashboard-server.up.railway.app/api/v1/",
+  baseURL: "https://aab-admin-server.up.railway.app/api/v1/",
   timeout: 1000,
   headers: { Authorization: `Bearer ${Cookies.get("TOKEN")}` },
 });
