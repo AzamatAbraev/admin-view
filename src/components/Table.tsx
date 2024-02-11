@@ -9,6 +9,7 @@ import { CheckCircleOutlined, CloseCircleOutlined, DeleteOutlined, LockOutlined,
 import { useNavigate } from 'react-router-dom';
 import { USER_DATA } from '../constants';
 import LoadingPage from '../pages/loading';
+import useAuth from '../store/auth';
 
 interface DataType {
   _id: string;
@@ -39,6 +40,7 @@ const DashboardTable = () => {
 
   const [form] = Form.useForm();
   const { users, loading, getAllUsers, deleteUser, blockUser, unblockUser, updateUser } = useUsers();
+  const { logout } = useAuth()
   const navigate = useNavigate();
 
 
@@ -80,7 +82,7 @@ const DashboardTable = () => {
     setSelectedRowKeys([])
     if (selectedRowKeys.includes(userId)) {
       message.info("Your account has been deleted. Redirecting to register page...");
-      navigate('/register');
+      await logout(navigate)
     }
   }
 
@@ -176,7 +178,7 @@ const DashboardTable = () => {
 
       if (selectedRowKeys.includes(userId)) {
         message.info("You have been blocked. Redirecting to login page...");
-        navigate('/login');
+        await logout(navigate)
       }
     } else {
       message.error("Please select user to perform this action")
