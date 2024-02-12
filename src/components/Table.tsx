@@ -77,7 +77,7 @@ const DashboardTable = () => {
   const showDeleteModal = () => {
     if (selectedRowKeys.length > 0) {
       Modal.confirm({
-        title: selectedRowKeys.length === 1 ? 'Are you sure delete this user?' : 'Are you sure delete these users?',
+        title: selectedRowKeys.length === 1 ? 'Do you want to delete this user?' : 'Do you want to delete these users?',
         content: 'This action cannot be undone',
         okText: 'Yes',
         okType: 'danger',
@@ -97,7 +97,7 @@ const DashboardTable = () => {
   const showBlockModal = () => {
     if (selectedRowKeys.length > 0) {
       Modal.confirm({
-        title: selectedRowKeys.length === 1 ? 'Are you sure block this user?' : 'Are you sure block these users?',
+        title: selectedRowKeys.length === 1 ? 'Do you want to block this user?' : 'Do you want to block these users?',
         okText: 'Yes',
         okType: 'danger',
         cancelText: 'Cancel',
@@ -116,7 +116,7 @@ const DashboardTable = () => {
   const showUnblockModal = () => {
     if (selectedRowKeys.length > 0) {
       Modal.confirm({
-        title: selectedRowKeys.length === 1 ? 'Are you sure unblock this user?' : 'Are you sure unblock these users?',
+        title: selectedRowKeys.length === 1 ? 'Do you want to unblock this user?' : 'Do you want to unblock these users?',
         okText: 'Yes',
         okType: 'danger',
         cancelText: 'Cancel',
