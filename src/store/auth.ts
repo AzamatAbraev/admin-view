@@ -58,7 +58,6 @@ const useAuth = create<AuthType>()((set) => ({
     localStorage.removeItem(USER_DATA);
     delete request.defaults.headers.Authorization;
     set({ isAuthenticated: false });
-    message.info("You are logged out");
     navigate("/login");
   },
 }));

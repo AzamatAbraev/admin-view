@@ -62,15 +62,16 @@ const DashboardTable = () => {
 
 
   const handleDelete = async () => {
-    await Promise.all(selectedRowKeys.map((userId) => deleteUser(userId as string)));
-    getAllUsers()
+    await Promise.all(selectedRowKeys.map((userId) => deleteUser(userId.toString())));
     selectedRowKeys.length === 1 ? message.info("User deleted") : message.info("Selected users deleted")
 
-    setSelectedRowKeys([])
     if (selectedRowKeys.includes(userId)) {
       message.info("Your account has been deleted. Redirecting to register page...");
-      await logout(navigate)
+      logout(navigate)
+    } else {
+      getAllUsers()
     }
+    setSelectedRowKeys([])
   }
 
   const showDeleteModal = () => {

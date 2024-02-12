@@ -21,6 +21,8 @@ const useUsers = create<UsersType>()((set, get) => ({
       const {
         data: { users },
       } = await request.get("users");
+      console.log(users);
+
       set({ users });
     } finally {
       set({ loading: false });
@@ -30,7 +32,7 @@ const useUsers = create<UsersType>()((set, get) => ({
     try {
       set({ loading: true });
       await request.delete("users", { data: { userId: id } });
-      await get().getAllUsers();
+      get().getAllUsers();
     } finally {
       set({ loading: false });
     }
@@ -57,7 +59,7 @@ const useUsers = create<UsersType>()((set, get) => ({
     try {
       set({ loading: true });
       await request.patch(`/users/${id}`, { name, email });
-      await get().getAllUsers();
+      get().getAllUsers();
     } finally {
       set({ loading: false });
     }
